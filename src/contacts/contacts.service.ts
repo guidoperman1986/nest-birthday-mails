@@ -1,9 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Contact } from './entities/contact.entity';
 import { Model } from 'mongoose';
+import { DateTime } from 'luxon';
 
 @Injectable()
 export class ContactsService {
@@ -19,7 +24,11 @@ export class ContactsService {
 
       return newContact;
     } catch (error) {
-      console.log(error);
+      if (error.code === 11000) {
+        throw new BadRequestException('User already exists');
+      }
+
+      throw new InternalServerErrorException();
     }
   }
 
@@ -29,6 +38,31 @@ export class ContactsService {
 
   findOne(id: number) {
     return `This action returns a #${id} contact`;
+  }
+
+  async findByDate(): Promise<Contact[]> {
+    const month = DateTime.now().month;
+    const day = DateTime.now().day;
+
+    const stringMonth = month < 10 ? '0' + month.toString() : month;
+    const stringDay = day < 10 ? '0' + day.toString() : day;
+
+    const contacts = await this.contactModel.aggregate([
+      {
+        $match: {
+          $expr: {
+            $regexMatch: {
+              input: {
+                $toString: '$birthdayDate',
+              },
+              regex: `${stringMonth}-${stringDay}`,
+            },
+          },
+        },
+      },
+    ]);
+    console.log(contacts);
+    return contacts;
   }
 
   update(id: number, updateContactDto: UpdateContactDto) {

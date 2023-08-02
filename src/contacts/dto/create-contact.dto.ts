@@ -1,4 +1,11 @@
-import { IsEmail, IsString, MinLength } from 'class-validator';
+import { Type } from 'class-transformer';
+import {
+  IsBoolean,
+  IsDate,
+  IsEmail,
+  IsString,
+  MinLength,
+} from 'class-validator';
 
 export class CreateContactDto {
   @IsEmail()
@@ -9,10 +16,11 @@ export class CreateContactDto {
   @IsString()
   @MinLength(3)
   surname: string;
-  @IsString()
-  birthdayDate: string;
+  @IsDate()
+  @Type(() => Date)
+  birthdayDate: Date;
   @IsString()
   phone: string;
-  @IsString()
-  male: string;
+  @IsBoolean()
+  male: boolean;
 }

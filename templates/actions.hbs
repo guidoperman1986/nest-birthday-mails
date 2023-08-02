@@ -11,6 +11,10 @@
     <meta name='viewport' content='width=device-width' />
     <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Happy+Monkey&family=Poppins:ital,wght@0,200;1,100&family=Raleway:wght@300&display=swap" rel="stylesheet">
+
     <style type='text/css'>
       img { max-width: 100%; } body { -webkit-font-smoothing: antialiased;
       -webkit-text-size-adjust: none; width: 100% !important; height: 100%;
@@ -27,27 +31,71 @@
       clear: both; margin-top: 10px; text-align: center; width: 100%; } .footer
       td, .footer p, .footer span, .footer a { color: #999999; font-size: 12px;
       text-align: center; } }
+
+      .container {
+        background-color: #B4AC99;
+        height: 100vh;
+        padding: 0;
+        margin: 0;
+
+        font-family: 'Happy Monkey', cursive;
+      }
+
+      .inner-container {
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .message {
+        margin-top: 40px;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-evenly;
+        height: 300px;
+        width: 80%;
+      }
+
+      .text-center {
+        text-align: center;
+      }
+
+      .line-height {
+        line-height: 1.5rem;
+      }
     </style>
   </head>
 
   <body
     itemscope
-    itemtype='http://schema.org/EmailMessage'
     style="
       font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
       box-sizing: border-box;
-      font-size: 14px;
-      -webkit-font-smoothing: antialiased;
-      -webkit-text-size-adjust: none;
       width: 100% !important;
-      height: 100%;
-      line-height: 1.6em;
-      background-color: #f6f6f6;
-      margin: 0;
+      line-height: 1.5rem;
     "
-    bgcolor='#f6f6f6'
   >
-    <table
+    <div class="container">
+      <div class="inner-container">
+        <img src="./imgs/happy-birthday.jpg" alt="">
+
+        <div class="message">
+          <h1>Hola, {{ name }}</h1>
+
+          <p><h2 class="text-center">Sabemos que este es un dia muy especial para vos, por eso queremos desearte feliz cumpleaños!</h2></p>
+
+          <p><h2>Te saludan</h2></p>
+
+          <p><h2>Los Perman's</h2></p>
+
+        </div>
+
+      </div>
+    </div>
+    {{!-- <table
       class='body-wrap'
       style="
         font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -349,6 +397,6 @@
           valign='top'
         ></td>
       </tr>
-    </table>
+    </table> --}}
   </body>
 </html>

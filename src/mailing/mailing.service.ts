@@ -4,13 +4,21 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { google } from 'googleapis';
 import { Options } from 'nodemailer/lib/smtp-transport';
+import { Contact } from 'src/contacts/entities/contact.entity';
+import { DateTime } from 'luxon';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { ContactsService } from 'src/contacts/contacts.service';
 
 @Injectable()
 export class MailingService {
   constructor(
     private readonly configService: ConfigService,
     private readonly mailerService: MailerService,
+    /* @InjectModel(Contact.name) private contactModel: Model<Contact>, */
+    private readonly contactsService: ContactsService,
   ) {}
+
   private async setTransport() {
     const OAuth2 = google.auth.OAuth2;
     const oauth2Client = new OAuth2(
@@ -26,6 +34,7 @@ export class MailingService {
     const accessToken: string = await new Promise((resolve, reject) => {
       oauth2Client.getAccessToken((err, token) => {
         if (err) {
+          console.log(err);
           reject('Failed to create access token');
         }
         resolve(token);
@@ -47,27 +56,31 @@ export class MailingService {
 
   public async sendMail() {
     await this.setTransport();
-    this.mailerService
-      .sendMail({
-        transporterName: 'gmail',
-        to: 'guidoperman@gmail.com',
-        from: 'noreply@nestjs.com',
-        subject: 'Verficiaction Code',
-        template: 'actions',
-        context: {
-          // Data to be sent to template engine..
-          code: '38320',
-        },
-      })
-      .then((success) => {
-        console.log(success)
-        return {
-          message: 'Email sent',
-          success,
-        };
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+
+    const contacts = await this.contactsService.findByDate();
+
+    if (contacts.length === 0) return;
+
+    contacts.forEach(async (contact) => {
+      await this.mailerService
+        .sendMail({
+          transporterName: 'gmail',
+          to: contact.email,
+          from: 'noreply@nestjs.com',
+          subject: 'Verficiaction Code',
+          template: 'actions',
+          context: {
+            // Data to be sent to template engine..
+            name: contact.name,
+            surname: contact.surname,
+          },
+        })
+        .then((success) => {
+          console.log(success);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
   }
 }
