@@ -15,7 +15,6 @@ export class MailingService {
   constructor(
     private readonly configService: ConfigService,
     private readonly mailerService: MailerService,
-    /* @InjectModel(Contact.name) private contactModel: Model<Contact>, */
     private readonly contactsService: ContactsService,
   ) {}
 
@@ -67,7 +66,7 @@ export class MailingService {
           transporterName: 'gmail',
           to: contact.email,
           from: 'noreply@nestjs.com',
-          subject: 'Verficiaction Code',
+          subject: 'Feliz Cumpleaños',
           template: 'actions',
           context: {
             // Data to be sent to template engine..
