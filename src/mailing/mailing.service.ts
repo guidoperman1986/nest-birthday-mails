@@ -69,7 +69,7 @@ export class MailingService {
           template: 'actions',
           attachments: [{
             filename: 'happy-birthday.jpg',
-            path: __dirname + '/assets/happy-birthday.jpg',
+            path: __dirname + '/assets/imgs/happy-birthday.jpg',
             cid: 'happy-birthday'
           }],
           context: {
