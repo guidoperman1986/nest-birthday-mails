@@ -70,16 +70,21 @@
       box-sizing: border-box;
       width: 100% !important;
       line-height: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
     "
   >
     <div class="container">
       <div class="inner-container">
         <img src="cid:happy-birthday" alt="">
 
-        <div class="message">
+        <div style="
+          margin-top: 60px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: space-evenly;
+          height: 300px;
+          width: 80%;
+        ">
           <h1>Hola, {{ name }}</h1>
 
           {{!-- <p><h2 class="text-center">Sabemos que este es un dia muy especial para vos, por eso queremos desearte feliz cumpleaños!</h2></p>
