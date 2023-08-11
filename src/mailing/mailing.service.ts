@@ -4,10 +4,6 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { google } from 'googleapis';
 import { Options } from 'nodemailer/lib/smtp-transport';
-import { Contact } from 'src/contacts/entities/contact.entity';
-import { DateTime } from 'luxon';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
 import { ContactsService } from 'src/contacts/contacts.service';
 
 @Injectable()
@@ -19,7 +15,6 @@ export class MailingService {
   ) {}
 
   private async setTransport() {
-    console.log(this.configService.get('CLIENT_ID'),this.configService.get('CLIENT_SECRET'), process.env.REFRESH_TOKEN);
     const OAuth2 = google.auth.OAuth2;
     const oauth2Client = new OAuth2(
       this.configService.get('CLIENT_ID'),
