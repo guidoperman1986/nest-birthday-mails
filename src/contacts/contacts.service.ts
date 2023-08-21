@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
@@ -33,11 +34,11 @@ export class ContactsService {
   }
 
   findAll() {
-    return `This action returns all contacts`;
+    return this.contactModel.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} contact`;
+  findOne(id: string) {
+    return this.contactModel.findById({ _id: id });
   }
 
   async findByDate(): Promise<Contact[]> {
@@ -69,7 +70,12 @@ export class ContactsService {
     return `This action updates a #${id} contact`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} contact`;
+  remove(id: string) {
+    try {
+      const contact = this.findOne(id);
+      return this.contactModel.deleteOne(contact);
+    } catch (error) {
+      throw new NotFoundException(`Contact with id ${id} was not found`);
+    }
   }
 }
