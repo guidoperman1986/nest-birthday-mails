@@ -41,6 +41,23 @@ export class ContactsService {
     return this.contactModel.findById({ _id: id });
   }
 
+  async findAllPaginated(skip: number, limit: number) {
+    const countItems = await this.contactModel.countDocuments({}).exec();
+    const totalPages = (await Math.floor((countItems - 1) / limit)) + 1;
+
+    const contacts = await this.contactModel
+      .find()
+      .sort({ birthdayDate: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    return {
+      contacts,
+      countItems,
+      totalPages,
+    };
+  }
+
   async findByDate(): Promise<Contact[]> {
     const month = DateTime.now().month;
     const day = DateTime.now().day;

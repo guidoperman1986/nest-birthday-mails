@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { ContactsService } from './contacts.service';
 import { CreateContactDto } from './dto/create-contact.dto';
@@ -23,14 +24,14 @@ export class ContactsController {
     return this.contactsService.create(createContactDto);
   }
 
-  @Get()
-  findAll() {
-    return this.contactsService.findAll();
-  }
-
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.contactsService.findOne(id);
+  }
+
+  @Get()
+  findAll(@Query() { skip, limit }) {
+    return this.contactsService.findAllPaginated(skip, limit);
   }
 
   @UseGuards(AuthGuard)
