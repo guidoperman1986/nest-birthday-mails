@@ -83,8 +83,17 @@ export class ContactsService {
     return contacts;
   }
 
-  update(id: number, updateContactDto: UpdateContactDto) {
-    return `This action updates a #${id} contact`;
+  async update(id: string, updateContactDto: UpdateContactDto) {
+    try {
+      const contactToUpdate = await this.findOne(id);
+      const udpatedContact = await contactToUpdate.updateOne(updateContactDto);
+
+      return udpatedContact;
+    } catch (error) {
+      console.log(error);
+
+      throw new InternalServerErrorException();
+    }
   }
 
   remove(id: string) {
