@@ -37,8 +37,10 @@ export class ContactsService {
     return this.contactModel.find();
   }
 
-  findOne(id: string) {
-    return this.contactModel.findById({ _id: id });
+  async findOne(id: string): Promise<Contact> {
+    const contact: Contact = await this.contactModel.findById({ _id: id });
+
+    return contact;
   }
 
   async findAllPaginated(skip: number, limit: number) {
@@ -85,10 +87,12 @@ export class ContactsService {
 
   async update(id: string, updateContactDto: UpdateContactDto) {
     try {
-      const contactToUpdate = await this.findOne(id);
-      const udpatedContact = await contactToUpdate.updateOne(updateContactDto);
+      await this.contactModel.updateOne({ _id: id }, updateContactDto);
 
-      return udpatedContact;
+      return {
+        ok: true,
+        updatedContact: updateContactDto,
+      };
     } catch (error) {
       console.log(error);
 
